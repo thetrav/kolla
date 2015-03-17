@@ -92,7 +92,8 @@ TMPDIR=$(mktemp -d /tmp/kolla-build.XXXXXXXXXX)
 cp -aL $IMGDIR/* $TMPDIR
 # Use an extension for in-place editing for portability, as GNU and BSD
 # versions of sed behave differently otherwise
-sed -i .bak "s/%%KOLLA_NAMESPACE%%/${NAMESPACE}/g" $TMPDIR/Dockerfile
+SED_SAFE="${NAMESPACE/\//\\/}"
+sed -i .bak "s/%%KOLLA_NAMESPACE%%/${SED_SAFE}/g" $TMPDIR/Dockerfile
 sed -i .bak "s/%%KOLLA_PREFIX%%/${PREFIX}/g" $TMPDIR/Dockerfile
 
 if ! docker build ${BUILDFLAGS} -t "$FULLIMAGE" $TMPDIR; then
