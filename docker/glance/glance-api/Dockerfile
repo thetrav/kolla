@@ -6,4 +6,6 @@ VOLUME /var/lib/glance
 ADD ./start.sh /start.sh
 ADD ./check.sh /check.sh
 
+EXPOSE 9292
+
 CMD ["/start.sh"]
