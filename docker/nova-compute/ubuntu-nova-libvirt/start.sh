@@ -4,10 +4,10 @@ set -e
 
 cfg=/etc/libvirt/libvirtd.conf
 
-crudini --set $cfg DEFAULT listen_tls 0
-crudini --set $cfg DEFAULT listen_tcp 1
-crudini --set $cfg DEFAULT tls_port "16514"
-crudini --set $cfg DEFAULT tcp_port "16509"
-crudini --set $cfg DEFAULT auth_tcp "none"
+echo 'listen_tls=0' >> $cfg
+echo 'listen_tcp=1' >> $cfg
+echo 'tls_port="16514"' >> $cfg
+echo 'tcp_port="16509"' >> $cfg
+echo 'auth_tcp="none"' >> $cfg
 
 /usr/sbin/libvirtd --listen
