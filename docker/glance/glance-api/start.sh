@@ -8,12 +8,13 @@ set -e
 
 check_required_vars KEYSTONE_ADMIN_TOKEN KEYSTONE_ADMIN_SERVICE_HOST \
                     GLANCE_KEYSTONE_USER GLANCE_KEYSTONE_PASSWORD \
-                    ADMIN_TENANT_NAME GLANCE_API_SERVICE_HOST \
+                    GLANCE_API_SERVICE_HOST \
+                    KEYSTONE_ADMIN_USER KEYSTONE_ADMIN_PASSWORD ADMIN_TENANT_NAME \
                     PUBLIC_IP
 
 /opt/kolla/wait_for 30 1 keystone \
                     --os-auth-url=http://${KEYSTONE_PUBLIC_SERVICE_HOST}:35357/v2.0 \
-                    --os-username=admin --os-tenant-name=${ADMIN_TENANT_NAME} \
+                    --os-username=${KEYSTONE_ADMIN_USER} --os-tenant-name=${ADMIN_TENANT_NAME} \
                     --os-password=${KEYSTONE_ADMIN_PASSWORD} endpoint-list
 check_for_keystone
 
