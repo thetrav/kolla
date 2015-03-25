@@ -22,10 +22,6 @@ export OS_TENANT_NAME="${ADMIN_TENANT_NAME}"
 EOF
 
 for cfg in /etc/glance/glance-api.conf /etc/glance/glance-registry.conf; do
-    crudini --set $cfg \
-        DEFAULT \
-        log_file \
-	""
 
     for option in auth_protocol auth_host auth_port; do
         crudini --del $cfg \
