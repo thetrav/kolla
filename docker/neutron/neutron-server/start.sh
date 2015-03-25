@@ -7,7 +7,8 @@ set -e
 
 check_required_vars KEYSTONE_ADMIN_TOKEN KEYSTONE_ADMIN_SERVICE_HOST \
                     KEYSTONE_AUTH_PROTOCOL NOVA_API_SERVICE_HOST \
-                    NOVA_ADMIN_PASSWORD NEUTRON_DB_NAME NEUTRON_DB_USER \
+                    NOVA_KEYSTONE_USER NOVA_ADMIN_PASSWORD \
+                    NEUTRON_DB_NAME NEUTRON_DB_USER \
                     NEUTRON_KEYSTONE_USER NEUTRON_KEYSTONE_PASSWORD \
                     ADMIN_TENANT_NAME NEUTRON_SERVER_SERVICE_HOST \
                     PUBLIC_IP NEUTRON_DB_PASSWORD
@@ -65,7 +66,7 @@ crudini --set /etc/neutron/neutron.conf \
 crudini --set /etc/neutron/neutron.conf \
         DEFAULT \
         nova_admin_username \
-        "nova"
+        "${NOVA_KEYSTONE_USER}"
 crudini --set /etc/neutron/neutron.conf \
         DEFAULT \
         nova_admin_tenant_id \
@@ -74,6 +75,8 @@ crudini --set /etc/neutron/neutron.conf \
         DEFAULT \
         nova_admin_password \
         "${NOVA_ADMIN_PASSWORD}"
+
+/usr/bin/neutron-db-manage --config-file /etc/neutron/neutron.conf --config-file /etc/neutron/plugins/ml2/ml2_conf.ini upgrade juno
 
 /usr/bin/ln -s /etc/neutron/plugins/ml2/ml2_conf.ini /etc/neutron/plugin.ini
 
