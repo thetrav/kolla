@@ -1,4 +1,4 @@
-FROM telstracto/ubuntu-rdo-base
+FROM %%KOLLA_NAMESPACE%%/%%KOLLA_PREFIX%%base
 
 RUN apt-get -y install openstack-dashboard apache2 libapache2-mod-wsgi memcached python-memcache
 

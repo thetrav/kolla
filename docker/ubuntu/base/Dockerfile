@@ -8,6 +8,4 @@ RUN echo "deb http://ubuntu-cloud.archive.canonical.com/ubuntu" "trusty-updates/
 
 RUN apt-get -y update && apt-get -y dist-upgrade
 
-RUN apt-get -y install nova-compute sysfsutils
-
 RUN apt-get -y install crudini

@@ -1,0 +1,33 @@
+#!/bin/bash
+
+NAMESPACE=10.16.0.12:5050/telstracto
+TAG=latest
+WD=$(pwd)
+PREFIX=ubuntu-rdo-
+
+build() {
+    IMAGE="${PREFIX}${1}"
+    IMGDIR=$WD/$2
+
+    FULLIMAGE="${NAMESPACE}/${IMAGE}${TAG:+:${TAG}}"
+
+    TMPDIR=$(mktemp -d /tmp/kolla-build.XXXXXXXXXX)
+    cp -aL $IMGDIR/* $TMPDIR
+
+    SED_SAFE="${NAMESPACE/\//\\/}"
+    sed -i .bak "s/%%KOLLA_NAMESPACE%%/${SED_SAFE}/g" $TMPDIR/Dockerfile
+    sed -i .bak "s/%%KOLLA_PREFIX%%/${PREFIX}/g" $TMPDIR/Dockerfile
+
+    if ! docker build ${BUILDFLAGS} -t "$FULLIMAGE" $TMPDIR; then
+        echo "ERROR: failed to build $FULLIMAGE"
+        exit 1
+    fi
+    rm -rf $TMPDIR
+
+    echo "Built: $FULLIMAGE"
+}
+
+build base base
+build horizon horizon
+build nova-compute nova-compute
+build nova-libvirt nova-libvirt
