@@ -8,7 +8,7 @@ RUN echo "deb http://ubuntu-cloud.archive.canonical.com/ubuntu" "trusty-updates/
 
 RUN apt-get -y update && apt-get -y dist-upgrade
 
-RUN apt-get -y install crudini
+RUN apt-get -y install crudini curl
 
 RUN mkdir -p /opt/kolla
 ADD service_hosts.sh /opt/kolla/service_hosts.sh
