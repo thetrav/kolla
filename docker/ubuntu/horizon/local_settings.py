@@ -304,8 +304,10 @@ LOGGING = {
         },
         'console': {
             # Set the level to "DEBUG" for verbose output logging.
-            'level': 'INFO',
-            'class': 'logging.StreamHandler',
+            'level': 'LOG_LEVEL',
+            'class': 'logging.handlers.RotatingFileHandler',
+            'filename': '/var/log/apache2/django.log',
+            'maxBytes': '16777216' # 16megabytes
         },
     },
     'loggers': {

@@ -1,0 +1,13 @@
+FROM %%KOLLA_NAMESPACE%%/%%KOLLA_PREFIX%%neutron-base
+MAINTAINER Kolla Project (https://launchpad.net/kolla)
+
+# Install required packages
+RUN apt-get install -y openstack-neutron
+
+# Add required scripts
+ADD ./start.sh /start.sh
+ADD ./check.sh /check.sh
+ADD ./sudoers.sh /sudoers.sh
+
+# Configure and run the service
+CMD ["/start.sh"]

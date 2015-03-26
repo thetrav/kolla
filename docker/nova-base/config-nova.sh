@@ -80,12 +80,20 @@ if [ "${NETWORK_MANAGER}" == "nova" ] ; then
   crudini --set $cfg DEFAULT public_interface $PUBLIC_INTERFACE
 elif [ "${NETWORK_MANAGER}" == "neutron" ] ; then
   check_required_vars NEUTRON_SHARED_SECRET
+  crudini --set $cfg DEFAULT linuxnet_interface_driver nova.network.linux_net.LinuxOVSInterfaceDriver
   crudini --set $cfg DEFAULT service_neutron_metadata_proxy True
   crudini --set $cfg DEFAULT neutron_metadata_proxy_shared_secret ${NEUTRON_SHARED_SECRET}
   crudini --set $cfg DEFAULT neutron_default_tenant_id default
   crudini --set $cfg DEFAULT network_api_class nova.network.neutronv2.api.API
   crudini --set $cfg DEFAULT security_group_api neutron
   crudini --set $cfg DEFAULT firewall_driver nova.virt.firewall.NoopFirewallDriver
+
+  crudini --set $cfg neutron url http://$NEUTRON_PUBLIC_SERVICE_HOST:9696
+  crudini --set $cfg neutron auth_strategy keystone
+  crudini --set $cfg neutron admin_auth_url http://$KEYSTONE_PUBLIC_SERVICE_HOST:35357/v2.0
+  crudini --set $cfg neutron admin_tenant_name $ADMIN_TENANT_NAME
+  crudini --set $cfg neutron admin_username $NEUTRON_KEYSTONE_USER
+  crudini --set $cfg neutron admin_password $NEUTRON_KEYSTONE_PASSWORD
 else
   echo "Incorrect NETWORK_MANAGER ${NETWORK_MANAGER}. Supported options are nova and neutron."
   exit 1

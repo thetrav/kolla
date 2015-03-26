@@ -9,3 +9,8 @@ RUN echo "deb http://ubuntu-cloud.archive.canonical.com/ubuntu" "trusty-updates/
 RUN apt-get -y update && apt-get -y dist-upgrade
 
 RUN apt-get -y install crudini
+
+RUN mkdir -p /opt/kolla
+ADD service_hosts.sh /opt/kolla/service_hosts.sh
+ADD kolla-common.sh /opt/kolla/kolla-common.sh
+ADD wait_for /opt/kolla/wait_for

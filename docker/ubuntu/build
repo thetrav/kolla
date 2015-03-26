@@ -24,10 +24,17 @@ build() {
     fi
     rm -rf $TMPDIR
 
+    if ! docker push "$FULLIMAGE"; then
+        echo "ERROR: failed to push $FULLIMAGE"
+        exit 1
+    fi
+
     echo "Built: $FULLIMAGE"
 }
 
 build base base
-build horizon horizon
-build nova-compute nova-compute
-build nova-libvirt nova-libvirt
+#build horizon horizon
+#build nova-compute nova-compute
+#build nova-libvirt nova-libvirt
+build neutron-base "neutron/neutron-base"
+build neutron-server "neutron/neutron-server"
