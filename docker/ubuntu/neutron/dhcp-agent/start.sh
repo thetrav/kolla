@@ -3,11 +3,6 @@
 set -e
 
 . /opt/kolla/config-neutron.sh
-. /sudoers.sh
-
-: ${INTERFACE_DRIVER:=neutron.agent.linux.interface.BridgeInterfaceDriver}
-: ${DHCP_DRIVER:=neutron.agent.linux.dhcp.Dnsmasq}
-: ${USE_NAMESPACES:=false}
 
 check_required_vars VERBOSE_LOGGING DEBUG_LOGGING
 
@@ -25,15 +20,24 @@ crudini --set $cfg \
 crudini --set $cfg \
         DEFAULT \
         interface_driver \
-        "${INTERFACE_DRIVER}"
+        "neutron.agent.linux.interface.OVSInterfaceDriver"
 crudini --set $cfg \
         DEFAULT \
         dhcp_driver \
-        "${DHCP_DRIVER}"
+        "neutron.agent.linux.dhcp.Dnsmasq"
 crudini --set $cfg \
         DEFAULT \
         use_namespaces \
-        "${USE_NAMESPACES}"
+        "True"
+crudini --set $cfg \
+        DEFAULT \
+        hdcp_delete_namespaces \
+        "True"
+crudini --set $cfg \
+        DEFAULT \
+        dnsmasq_config_file \
+        "/etc/neutron/dnsmasq-neutron.conf"
+
 
 # Start DHCP Agent
 exec /usr/bin/neutron-dhcp-agent

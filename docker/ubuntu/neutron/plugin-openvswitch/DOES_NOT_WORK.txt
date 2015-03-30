@@ -1,0 +1,3 @@
+This one is still a thought experiment... 
+It currently doesn't work, and I expect OpenVSwitch to be installed and managed by OpenDaylight, So I've installed openvswitch on the host for the moment.
+

@@ -2,14 +2,11 @@ FROM %%KOLLA_NAMESPACE%%/%%KOLLA_PREFIX%%neutron-base
 MAINTAINER Kolla Project (https://launchpad.net/kolla)
 
 # Install required packages
-RUN apt-get install -y neutron-dhcp-agent
+RUN apt-get install -y neutron-l3-agent
 
 # Add required scripts
 ADD ./start.sh /start.sh
 ADD ./check.sh /check.sh
-
-#custom dnsmasq conf to limit MTU due to GRE constraints
-ADD ./dnsmasq-neutron.conf /etc/neutron/dnsmasq-neutron.conf
 
 # Configure and run the service
 CMD ["/start.sh"]
