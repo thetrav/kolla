@@ -18,9 +18,6 @@ crudini --set $cfg DEFAULT use_namespaces "True"
 crudini --set $cfg DEFAULT external_network_bridge "br-ex"
 crudini --set $cfg DEFAULT router_delete_namespaces "True"
 
-#fix some missing config file related crash
-mkdir -p /usr/share/neutron
-touch /usr/share/neutron/neutron-dist.conf
 
 # Start L3 Agent
-exec /usr/bin/neutron-l3-agent --config-file /usr/share/neutron/neutron-dist.conf --config-file /etc/neutron/neutron.conf --config-file /etc/neutron/l3_agent.ini --config-file /etc/neutron/fwaas_driver.ini
+exec /usr/bin/neutron-l3-agent --config-file /etc/neutron/neutron.conf --config-file /etc/neutron/l3_agent.ini --config-file /etc/neutron/fwaas_driver.ini

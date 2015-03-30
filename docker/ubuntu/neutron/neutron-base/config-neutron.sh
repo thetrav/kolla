@@ -15,8 +15,7 @@ set -e
 : ${VERBOSE_LOGGING:=true}
 : ${DEBUG_LOGGING:=false}
 
-check_required_vars NEUTRON_KEYSTONE_PASSWORD \
-                    KEYSTONE_PUBLIC_SERVICE_HOST RABBITMQ_SERVICE_HOST
+check_required_vars NEUTRON_KEYSTONE_PASSWORD KEYSTONE_PUBLIC_SERVICE_HOST RABBITMQ_SERVICE_HOST
 
 dump_vars
 
@@ -31,66 +30,24 @@ core_cfg=/etc/neutron/neutron.conf
 ml2_cfg=/etc/neutron/plugins/ml2/ml2_conf.ini
 
 # Logging
-crudini --set $core_cfg \
-        DEFAULT \
-        log_dir \
-        "/var/log/neutron"
-crudini --set $core_cfg \
-        DEFAULT \
-        verbose \
-        "${VERBOSE_LOGGING}"
-crudini --set $core_cfg \
-        DEFAULT \
-        debug \
-        "${DEBUG_LOGGING}"
+crudini --set $core_cfg DEFAULT log_dir "/var/log/neutron"
+crudini --set $core_cfg DEFAULT verbose "${VERBOSE_LOGGING}"
+crudini --set $core_cfg DEFAULT debug "${DEBUG_LOGGING}"
 
 # Rabbit
-crudini --set $core_cfg \
-        DEFAULT \
-        rabbit_host \
-        "${RABBIT_HOST}"
-crudini --set $core_cfg \
-        DEFAULT \
-        rabbit_userid \
-        "${RABBIT_USER}"
-crudini --set $core_cfg \
-        DEFAULT \
-        rabbit_password \
-        "${RABBIT_PASSWORD}"
+crudini --set $core_cfg DEFAULT rabbit_host "${RABBIT_HOST}"
+crudini --set $core_cfg DEFAULT rabbit_userid "${RABBIT_USER}"
+crudini --set $core_cfg DEFAULT rabbit_password "${RABBIT_PASSWORD}"
 
 # Keystone
-crudini --set $core_cfg \
-        DEFAULT \
-        auth_strategy \
-        "keystone"
-crudini --set $core_cfg \
-        keystone_authtoken \
-        auth_protocol \
-        "${KEYSTONE_AUTH_PROTOCOL}"
-crudini --set $core_cfg \
-        keystone_authtoken \
-        auth_host \
-        "${KEYSTONE_ADMIN_SERVICE_HOST}"
-crudini --set $core_cfg \
-        keystone_authtoken \
-        auth_port \
-        "${KEYSTONE_ADMIN_SERVICE_PORT}"
-crudini --set $core_cfg \
-        keystone_authtoken \
-        auth_uri \
-        "${KEYSTONE_AUTH_PROTOCOL}://${KEYSTONE_PUBLIC_SERVICE_HOST}:5000/"
-crudini --set $core_cfg \
-        keystone_authtoken \
-        admin_tenant_name \
-        "${ADMIN_TENANT_NAME}"
-crudini --set $core_cfg \
-        keystone_authtoken \
-        admin_user \
-        "${NEUTRON_KEYSTONE_USER}"
-crudini --set $core_cfg \
-        keystone_authtoken \
-        admin_password \
-        "${NEUTRON_KEYSTONE_PASSWORD}"
+crudini --set $core_cfg DEFAULT auth_strategy "keystone"
+crudini --set $core_cfg keystone_authtoken auth_protocol "${KEYSTONE_AUTH_PROTOCOL}"
+crudini --set $core_cfg keystone_authtoken auth_host "${KEYSTONE_ADMIN_SERVICE_HOST}"
+crudini --set $core_cfg keystone_authtoken auth_port "${KEYSTONE_ADMIN_SERVICE_PORT}"
+crudini --set $core_cfg keystone_authtoken auth_uri "${KEYSTONE_AUTH_PROTOCOL}://${KEYSTONE_PUBLIC_SERVICE_HOST}:5000/"
+crudini --set $core_cfg keystone_authtoken admin_tenant_name "${ADMIN_TENANT_NAME}"
+crudini --set $core_cfg keystone_authtoken admin_user "${NEUTRON_KEYSTONE_USER}"
+crudini --set $core_cfg keystone_authtoken admin_password "${NEUTRON_KEYSTONE_PASSWORD}"
 
 # neutron.conf ml2 configuration
 crudini --set $core_cfg DEFAULT core_plugin "ml2"
@@ -103,6 +60,10 @@ crudini --set $ml2_cfg ml2 tenant_network_types "gre"
 crudini --set $ml2_cfg ml2 mechanism_drivers "openvswitch"
 crudini --set $ml2_cfg ml2_type_gre tunnel_id_ranges "1:1000"
 
-crudini --set $ml2_cfg securitygroup enable_security_group True
-crudini --set $ml2_cfg securitygroup enable_ipset True
-crudini --set $ml2_cfg securitygroup firewall_driver neutron.agent.linux.iptables_firewall.OVSHybridIptablesFirewallDriver
+crudini --set $ml2_cfg securitygroup enable_security_group "True"
+crudini --set $ml2_cfg securitygroup enable_ipset "True"
+crudini --set $ml2_cfg securitygroup firewall_driver "neutron.agent.linux.iptables_firewall.OVSHybridIptablesFirewallDriver"
+ 
+crudini --set $ml2_cfg ovs local_ip "${TUNNEL_IP}"
+crudini --set $ml2_cfg ovs enable_tunneling "True"
+crudini --set $ml2_cfg ovs bridge_mappings "external:${EXTERNAL_BRIDGE_NAME}"

@@ -4,40 +4,19 @@ set -e
 
 . /opt/kolla/config-neutron.sh
 
-check_required_vars VERBOSE_LOGGING DEBUG_LOGGING
+#TODO: default these to false
+: ${VERBOSE_LOGGING:=True}
+: ${DEBUG_LOGGING:=True}
 
-cfg=/etc/neutron/dhcp_agent.ini
-
+#crudini is creating multiple DEFAULT blocks >_<
 # Configure dhcp_agent.ini
-crudini --set $cfg \
-        DEFAULT \
-        verbose \
-        "${VERBOSE_LOGGING}"
-crudini --set $cfg \
-        DEFAULT \
-        debug \
-        "${DEBUG_LOGGING}"
-crudini --set $cfg \
-        DEFAULT \
-        interface_driver \
-        "neutron.agent.linux.interface.OVSInterfaceDriver"
-crudini --set $cfg \
-        DEFAULT \
-        dhcp_driver \
-        "neutron.agent.linux.dhcp.Dnsmasq"
-crudini --set $cfg \
-        DEFAULT \
-        use_namespaces \
-        "True"
-crudini --set $cfg \
-        DEFAULT \
-        hdcp_delete_namespaces \
-        "True"
-crudini --set $cfg \
-        DEFAULT \
-        dnsmasq_config_file \
-        "/etc/neutron/dnsmasq-neutron.conf"
-
+ echo "verbose=${VERBOSE_LOGGING}" >> /etc/neutron/dhcp_agent.ini
+ echo "debug=${DEBUG_LOGGING}" >> /etc/neutron/dhcp_agent.ini
+ echo "interface_driver=neutron.agent.linux.interface.OVSInterfaceDriver" >> /etc/neutron/dhcp_agent.ini
+ echo "dhcp_driver=neutron.agent.linux.dhcp.Dnsmasq" >> /etc/neutron/dhcp_agent.ini
+ echo "use_namespaces=True" >> /etc/neutron/dhcp_agent.ini
+ echo "dhcp_delete_namespaces=True" >> /etc/neutron/dhcp_agent.ini
+ echo "dnsmasq_config_file=/etc/neutron/dnsmasq-neutron.conf" >> /etc/neutron/dhcp_agent.ini
 
 # Start DHCP Agent
-exec /usr/bin/neutron-dhcp-agent
+exec /usr/bin/neutron-dhcp-agent --config-file=/etc/neutron/neutron.conf --config-file=/etc/neutron/dhcp_agent.ini --log-file=/var/log/neutron/dhcp-agent.log
