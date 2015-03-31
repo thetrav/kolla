@@ -34,6 +34,9 @@ crudini --set $core_cfg DEFAULT log_dir "/var/log/neutron"
 crudini --set $core_cfg DEFAULT verbose "${VERBOSE_LOGGING}"
 crudini --set $core_cfg DEFAULT debug "${DEBUG_LOGGING}"
 
+# mysql
+crudini --set /etc/neutron/neutron.conf database connection "mysql://${NEUTRON_DB_USER}:${NEUTRON_DB_PASSWORD}@${MARIADB_SERVICE_HOST}/${NEUTRON_DB_NAME}"
+
 # Rabbit
 crudini --set $core_cfg DEFAULT rabbit_host "${RABBIT_HOST}"
 crudini --set $core_cfg DEFAULT rabbit_userid "${RABBIT_USER}"
