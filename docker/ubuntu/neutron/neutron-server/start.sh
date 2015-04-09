@@ -5,6 +5,10 @@ set -e
 . /opt/kolla/kolla-common.sh
 . /opt/kolla/config-neutron.sh
 
+#if not overwritten, assume nova-api is co-located
+: ${NOVA_API_SERVICE_HOST:=$PUBLIC_IP}
+: ${NEUTRON_SERVER_SERVICE_HOST:=$PUBLIC_IP}
+
 check_required_vars KEYSTONE_ADMIN_TOKEN KEYSTONE_ADMIN_SERVICE_HOST KEYSTONE_AUTH_PROTOCOL \
   NOVA_API_SERVICE_HOST NOVA_KEYSTONE_USER NOVA_KEYSTONE_PASSWORD \
   NEUTRON_DB_NAME NEUTRON_DB_USER NEUTRON_KEYSTONE_USER NEUTRON_KEYSTONE_PASSWORD \
@@ -50,4 +54,4 @@ crudini --set /etc/neutron/neutron.conf DEFAULT nova_admin_password "${NOVA_KEYS
 
 /bin/ln -s /etc/neutron/plugins/ml2/ml2_conf.ini /etc/neutron/plugin.ini
 
-exec /usr/bin/neutron-server
+exec /usr/bin/neutron-server --config-file /etc/neutron/neutron.conf --config-file /etc/neutron/plugins/ml2/ml2_conf.ini

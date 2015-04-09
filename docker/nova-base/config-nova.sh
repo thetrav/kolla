@@ -80,6 +80,8 @@ if [ "${NETWORK_MANAGER}" == "nova" ] ; then
   crudini --set $cfg DEFAULT public_interface $PUBLIC_INTERFACE
 elif [ "${NETWORK_MANAGER}" == "neutron" ] ; then
   check_required_vars NEUTRON_SHARED_SECRET
+  : ${NEUTRON_PUBLIC_SERVICE_HOST:=$NEUTRON_SERVER_SERVICE_HOST}
+  
   crudini --set $cfg DEFAULT linuxnet_interface_driver nova.network.linux_net.LinuxOVSInterfaceDriver
   crudini --set $cfg DEFAULT service_neutron_metadata_proxy True
   crudini --set $cfg DEFAULT neutron_metadata_proxy_shared_secret ${NEUTRON_SHARED_SECRET}

@@ -27,4 +27,4 @@ crudini --set $cfg DEFAULT nova_metadata_ip "${NOVA_API_SERVICE_HOST}"
 crudini --set $cfg DEFAULT metadata_proxy_shared_secret "${NEUTRON_SHARED_SECRET}"
 
 # Start Metadata Agent
-exec /usr/bin/neutron-metadata-agent
+exec /usr/bin/neutron-metadata-agent --config-file /etc/neutron/neutron.conf --config-file /etc/neutron/metadata_agent.ini
