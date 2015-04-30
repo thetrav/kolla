@@ -36,11 +36,6 @@ build() {
 
 build base base
 build horizon horizon
-#build nova-compute nova-compute
-#build nova-libvirt nova-libvirt
+build horizon designate
 build neutron-base "neutron/neutron-base"
 build neutron-server "neutron/neutron-server"
-#build neutron-dhcp-agent "neutron/dhcp-agent"
-#build neutron-l3-agent "neutron/l3-agent"
-#build neutron-metadata-agent "neutron/metadata-agent"
-#build neutron-plugin-openvswitch "neutron/plugin-openvswitch"
