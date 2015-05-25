@@ -67,6 +67,13 @@ crudini --set $cfg \
     connection \
     "mysql://${KEYSTONE_DB_USER}:${KEYSTONE_DB_PASSWORD}@${MARIADB_SERVICE_HOST}/${KEYSTONE_DB_NAME}"
 
+# RabbitMQ
+crudini --unset $cfg DEFAULT rabbit_host
+crudini --set $cfg \
+    DEFAULT \
+    rabbit_hosts
+    "${RABBITMQ_HOSTS}"
+
 # Logging
 crudini --del $cfg \
     DEFAULT \

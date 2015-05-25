@@ -10,5 +10,7 @@ RUN yum -y install openstack-keystone \
 ADD ./start.sh /opt/kolla/start.sh
 ADD ./check.sh /opt/kolla/check.sh
 
+EXPOSE 5000 35357
+
 # Run the Keystone start script
 CMD ["/opt/kolla/start.sh"]
